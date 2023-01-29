@@ -144,8 +144,6 @@ func AESdecrypt(text, password string) (string, error) {
 	// for symmetric key cryptographic block ciphers
 	// - https://en.wikipedia.org/wiki/Galois/Counter_Mode
 	gcm, err := cipher.NewGCM(c)
-	// if any error generating new GCM
-	// handle them
 	if err != nil {
 		return "", err
 	}
