@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"encoding/base64"
+	"errors"
 	"fmt"
 	"io"
 	"os"
@@ -16,7 +17,7 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "AESpass"
-	app.Usage = "Encrypt and Decrypt text with AES using password"
+	app.Usage = "Encrypt and Decrypt text with AES using password. Encrypted result is base64 encoded"
 	app.UsageText = "aespass [command] text password"
 	app.HideHelp = true
 	app.HideVersion = true
@@ -29,7 +30,7 @@ func main() {
 			Action: func(c *cli.Context) error {
 				encText, err := AESencrypt(c.Args().Get(0), c.Args().Get(1))
 				if err != nil {
-					fmt.Println("error encrypting: ", err)
+					fmt.Println("error encrypting: ", err.Error())
 				}
 				fmt.Println(encText)
 				return nil
@@ -42,7 +43,7 @@ func main() {
 			Action: func(c *cli.Context) error {
 				decText, err := AESdecrypt(c.Args().Get(0), c.Args().Get(1))
 				if err != nil {
-					fmt.Println("error decrypting: ", err)
+					fmt.Println("error decrypting: ", err.Error())
 				}
 				fmt.Println(decText)
 				return nil
@@ -52,8 +53,16 @@ func main() {
 	app.Run(os.Args)
 }
 
-// AES
 func AESencrypt(text, password string) (string, error) {
+
+	// check inputs
+	if len(text) == 0 {
+		return "", errors.New("text is empty")
+	}
+	if len(password) < 8 {
+		return "", errors.New("password must be at least 8 characters")
+	}
+
 	// transform text password into appropriate 32 byte key for AES
 	// generate a new aes cipher using our 32 byte long key
 	key, salt, err := DeriveKey([]byte(password), nil)
@@ -63,7 +72,6 @@ func AESencrypt(text, password string) (string, error) {
 
 	// generate a new aes cipher using our 32 byte long key
 	c, err := aes.NewCipher([]byte(key))
-	// if there are any errors, handle them
 	if err != nil {
 		return "", err
 	}
@@ -100,10 +108,22 @@ func AESencrypt(text, password string) (string, error) {
 
 func AESdecrypt(text, password string) (string, error) {
 
+	// check inputs
+	if len(text) == 0 {
+		return "", errors.New("text is empty")
+	}
+	if len(password) < 8 {
+		return "", errors.New("password must be at least 8 characters")
+	}
+
 	// decode text from base64
 	ciphertextWithSalt, err := base64.StdEncoding.DecodeString(text) // bytes
 	if err != nil {
 		return "", err
+	}
+	// check input text length
+	if len(ciphertextWithSalt) < 32 {
+		return "", errors.New("invalid input text")
 	}
 
 	// get salt from the end
@@ -116,7 +136,6 @@ func AESdecrypt(text, password string) (string, error) {
 
 	// generate a new aes cipher using our 32 byte long key
 	c, err := aes.NewCipher([]byte(key))
-	// if any errors, handle them
 	if err != nil {
 		return "", err
 	}
@@ -160,7 +179,7 @@ func DeriveKey(password, salt []byte) ([]byte, []byte, error) {
 	}
 
 	// minimum N is 16384
-	// *32 will take about 1.5sec to encode on mac m1 max
+	// *32 will take about 2 sec
 	n := 16384 * 32
 	key, err := scrypt.Key(password, salt, n, 8, 1, 32)
 	if err != nil {
@@ -168,27 +187,4 @@ func DeriveKey(password, salt []byte) ([]byte, []byte, error) {
 	}
 
 	return key, salt, nil
-}
-
-func demo() {
-
-	const MySecret string = "12345"
-
-	StringToEncrypt := "Encrypting this string"
-	fmt.Println("String to encrypt: ", StringToEncrypt)
-
-	// To encrypt the StringToEncrypt
-	encText, err := AESencrypt(StringToEncrypt, MySecret)
-	if err != nil {
-		fmt.Println("error encrypting your classified text: ", err)
-	}
-	fmt.Println(encText)
-
-	// decrypting
-	decText, err := AESdecrypt(encText, MySecret)
-	if err != nil {
-		fmt.Println("error decrypting your classified text: ", err)
-	}
-	fmt.Println("decrypted text: ", decText)
-
 }
