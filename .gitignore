@@ -1,6 +1,5 @@
-aespass
+bin
 vendor
 .idea
 coverage.txt
-run.sh
 
