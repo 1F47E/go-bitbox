@@ -1,5 +1,14 @@
 # AESpass 🔒
 ```
+ _______  _______  _______  _______  _______  _______  _______ 
+|   _   ||       ||       ||       ||   _   ||       ||       |
+|  |_|  ||    ___||  _____||    _  ||  |_|  ||  _____||  _____|
+|       ||   |___ | |_____ |   |_| ||       || |_____ | |_____ 
+|       ||    ___||_____  ||    ___||       ||_____  ||_____  |
+|   _   ||   |___  _____| ||   |    |   _   | _____| | _____| |
+|__| |__||_______||_______||___|    |__| |__||_______||_______|
+
+
 A command line tool for encrypting and decrypting text using a password. 
 
 The output is base64 encoded.
@@ -7,11 +16,11 @@ The output is base64 encoded.
 
 ## Why use a password instead of a key?
 
-AESpass uses the scrypt key derivation function to transform the user-provided password into a 32-byte key suitable for use with AES.
+AESpass uses the [scrypt](https://godoc.org/golang.org/x/crypto/scrypt) key derivation function to transform the user-provided password into a 32-byte key suitable for use with AES.
 
 ## How it works
 
-AESpass uses AES in Galois/Counter Mode (GCM) for encryption and decryption. GCM is a mode of operation for symmetric key cryptographic block ciphers that provides authenticity and confidentiality.
+AESpass uses [Advanced Encryption Standard (AES)](https://en.wikipedia.org/wiki/Advanced_Encryption_Standard) in [Galois/Counter Mode (GCM)](https://en.wikipedia.org/wiki/Galois/Counter_Mode) for encryption and decryption. GCM is a mode of operation for symmetric key cryptographic block ciphers that provides authenticity and confidentiality.
 
 ## Usage
 
