@@ -17,8 +17,8 @@ import (
 func main() {
 	app := cli.NewApp()
 	app.Name = "AESpass"
-	app.Usage = "Encrypt and Decrypt text with AES using password. Encrypted result is base64 encoded"
-	app.UsageText = "aespass [command] text password"
+	app.Usage = "Encrypt and Decrypt anything with AES using bytes. Encrypted result is base64 encoded"
+	app.UsageText = "aespass [command] key text or -f file"
 	app.HideHelp = true
 	app.HideVersion = true
 	app.ArgsUsage = ""
@@ -53,19 +53,22 @@ func main() {
 	app.Run(os.Args)
 }
 
-func AESencrypt(text, password string) (string, error) {
+func AESencrypt(text, keyfile string) (string, error) {
 
 	// check inputs
 	if len(text) == 0 {
 		return "", errors.New("text is empty")
 	}
-	if len(password) < 8 {
-		return "", errors.New("password must be at least 8 characters")
+	// read contents of a key from file
+	// read from file
+	b, err := os.ReadFile(keyfile)
+	if err != nil {
+		return "", err
 	}
 
 	// transform text password into appropriate 32 byte key for AES
 	// generate a new aes cipher using our 32 byte long key
-	key, salt, err := DeriveKey([]byte(password), nil)
+	key, salt, err := DeriveKey(b, nil)
 	if err != nil {
 		return "", err
 	}
@@ -106,14 +109,15 @@ func AESencrypt(text, password string) (string, error) {
 	return base64.StdEncoding.EncodeToString(encryptedTest), nil
 }
 
-func AESdecrypt(text, password string) (string, error) {
+func AESdecrypt(text, keyfile string) (string, error) {
 
 	// check inputs
 	if len(text) == 0 {
 		return "", errors.New("text is empty")
 	}
-	if len(password) < 8 {
-		return "", errors.New("password must be at least 8 characters")
+	b, err := os.ReadFile(keyfile)
+	if err != nil {
+		return "", err
 	}
 
 	// decode text from base64
@@ -129,7 +133,7 @@ func AESdecrypt(text, password string) (string, error) {
 	// get salt from the end
 	salt, ciphertext := ciphertextWithSalt[len(ciphertextWithSalt)-32:], ciphertextWithSalt[:len(ciphertextWithSalt)-32]
 
-	key, _, err := DeriveKey([]byte(password), salt)
+	key, _, err := DeriveKey(b, salt)
 	if err != nil {
 		return "", err
 	}
