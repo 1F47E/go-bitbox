@@ -16,9 +16,9 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "AESpass"
+	app.Name = "Bytebox"
 	app.Usage = "Encrypt and Decrypt anything with AES using bytes. Encrypted result is base64 encoded"
-	app.UsageText = "aespass [command] key text or -f file"
+	app.UsageText = "bytebox [command] key text"
 	app.HideHelp = true
 	app.HideVersion = true
 	app.ArgsUsage = ""
@@ -28,7 +28,7 @@ func main() {
 			Aliases: []string{"e"},
 			Usage:   "Encrypt a string",
 			Action: func(c *cli.Context) error {
-				encText, err := AESencrypt(c.Args().Get(0), c.Args().Get(1))
+				encText, err := encrypt(c.Args().Get(0), c.Args().Get(1))
 				if err != nil {
 					fmt.Println("error encrypting: ", err.Error())
 				}
@@ -41,7 +41,7 @@ func main() {
 			Aliases: []string{"d"},
 			Usage:   "Decrypt a string",
 			Action: func(c *cli.Context) error {
-				decText, err := AESdecrypt(c.Args().Get(0), c.Args().Get(1))
+				decText, err := decrypt(c.Args().Get(0), c.Args().Get(1))
 				if err != nil {
 					fmt.Println("error decrypting: ", err.Error())
 				}
@@ -53,7 +53,7 @@ func main() {
 	app.Run(os.Args)
 }
 
-func AESencrypt(text, keyfile string) (string, error) {
+func encrypt(text, keyfile string) (string, error) {
 
 	// check inputs
 	if len(text) == 0 {
@@ -109,7 +109,7 @@ func AESencrypt(text, keyfile string) (string, error) {
 	return base64.StdEncoding.EncodeToString(encryptedTest), nil
 }
 
-func AESdecrypt(text, keyfile string) (string, error) {
+func decrypt(text, keyfile string) (string, error) {
 
 	// check inputs
 	if len(text) == 0 {
@@ -172,6 +172,7 @@ func AESdecrypt(text, keyfile string) (string, error) {
 	}
 	return string(plaintext), nil
 }
+
 func DeriveKey(password, salt []byte) ([]byte, []byte, error) {
 	if salt == nil {
 		salt = make([]byte, 32)

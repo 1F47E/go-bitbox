@@ -23,7 +23,7 @@ builds:
       - windows_amd64
     ldflags:
       - -s -w
-    main: ./cmd/aespass
+    main: ./cmd/bytebox
 
 archives:
   - format: tar.gz

@@ -1,4 +1,4 @@
-module aespass
+module bytebox
 
 go 1.19
 
