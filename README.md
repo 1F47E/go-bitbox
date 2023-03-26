@@ -1,4 +1,3 @@
-# bytebox  🔒
 ```
  _           _       _               
  | |         | |     | |              
@@ -9,7 +8,7 @@
          __/ |                        
         |___/            
 
-A command line tool for encrypting and decrypting text using a password. 
+A command line tool written in Go for encrypting and decrypting text using a password. 
 
 The output is base64 encoded.
 ```
@@ -38,23 +37,23 @@ COMMANDS:
 
 ## Examples
 
-Encrypt a string with the password 12345678:
+Encrypt a string "secret_string" with the password 12345678:
 ```
-Bytebox e secret 123456789
+Bytebox e secret_string 123456789
 ```
 Output:
 ```
 WOx69r3Y1a0qNqZGvwG44eJ5FaU+xyHjPdFDt8klThlrZ5m1o7rG3tMztr8KibXMfN4UW3m/dfLyCmimnyQPX3f5
 ```
 
-Decrypt a string with the password 12345678:
+Decrypt a base64 string with the password 12345678:
 
 ```
 Bytebox d WOx69r3Y1a0qNqZGvwG44eJ5FaU+xyHjPdFDt8klThlrZ5m1o7rG3tMztr8KibXMfN4UW3m/dfLyCmimnyQPX3f5 12345678
 ```
 Output:
 ```
-secret
+secret_string
 ```
 
 
