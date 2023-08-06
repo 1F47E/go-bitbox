@@ -1,6 +1,6 @@
-module bytebox
+module github.com/1F47E/go-bitbox
 
-go 1.19
+go 1.20
 
 require (
 	github.com/urfave/cli v1.22.12

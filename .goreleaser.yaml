@@ -23,7 +23,7 @@ builds:
       - windows_amd64
     ldflags:
       - -s -w
-    main: ./cmd/bytebox
+    main: ./cmd/Bitbox
 
 archives:
   - format: tar.gz

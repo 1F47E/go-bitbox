@@ -16,9 +16,9 @@ import (
 
 func main() {
 	app := cli.NewApp()
-	app.Name = "Bytebox"
+	app.Name = "Bitbox"
 	app.Usage = "Encrypt and Decrypt anything with AES using bytes. Encrypted result is base64 encoded"
-	app.UsageText = "bytebox [command] key text"
+	app.UsageText = "Bitbox [command] key text"
 	app.HideHelp = true
 	app.HideVersion = true
 	app.ArgsUsage = ""
