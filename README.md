@@ -1,12 +1,7 @@
 ```
 A command line tool written in Go for encrypting and decrypting text using a password. 
 
-The output is base64 encoded.
 ```
-
-## Why use a password instead of a key?
-
-Bitbox uses the [scrypt](https://godoc.org/golang.org/x/crypto/scrypt) key derivation function to transform the user-provided password into a 32-byte key suitable for use with AES.
 
 ## How it works
 
@@ -16,10 +11,10 @@ Bitbox uses [Advanced Encryption Standard (AES)](https://en.wikipedia.org/wiki/A
 
 ```bash
 NAME:
-   Bitbox - Encrypt and Decrypt text with AES using password. Encrypted result is base64 encoded
+   bitbox - Encrypt and Decrypt text with AES using password. Encrypted result is base64 encoded string
 
 USAGE:
-   Bitbox [command] text password
+   bitbox [command] text password
 
 COMMANDS:
    encrypt, e  Encrypt a string
@@ -30,7 +25,7 @@ COMMANDS:
 
 Encrypt a string "secret_string" with the password 12345678:
 ```
-Bitbox e secret_string 123456789
+bitbox e secret_string 123456789
 ```
 Output:
 ```
@@ -40,7 +35,7 @@ WOx69r3Y1a0qNqZGvwG44eJ5FaU+xyHjPdFDt8klThlrZ5m1o7rG3tMztr8KibXMfN4UW3m/dfLyCmim
 Decrypt a base64 string with the password 12345678:
 
 ```
-Bitbox d WOx69r3Y1a0qNqZGvwG44eJ5FaU+xyHjPdFDt8klThlrZ5m1o7rG3tMztr8KibXMfN4UW3m/dfLyCmimnyQPX3f5 12345678
+bitbox d WOx69r3Y1a0qNqZGvwG44eJ5FaU+xyHjPdFDt8klThlrZ5m1o7rG3tMztr8KibXMfN4UW3m/dfLyCmimnyQPX3f5 12345678
 ```
 Output:
 ```
